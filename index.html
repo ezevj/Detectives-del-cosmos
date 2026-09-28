@@ -1,0 +1,1228 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Expediente Secreto: Detectives del Cosmos (5.° Grado - 5 Páginas)</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <style>
+    :root {
+      --navy: #0b192c;
+      --blue: #1e3a8a;
+      --sky: #0284c7;
+      --gold: #d97706;
+      --gold-bright: #fbbf24;
+      --slate-dark: #0f172a;
+      --slate: #475569;
+      --border: #94a3b8;
+      --bg-soft: #f8fafc;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, Arial, sans-serif;
+      background-color: #334155;
+      color: var(--slate-dark);
+      line-height: 1.35;
+      padding: 70px 0 40px 0;
+    }
+
+    /* BARRA SUPERIOR (No sale al imprimir) */
+    .toolbar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 58px;
+      background: var(--navy);
+      border-bottom: 3px solid var(--gold-bright);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      z-index: 1000;
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.35);
+    }
+
+    .toolbar-title {
+      font-size: 13.5px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .toolbar-badge {
+      background: var(--gold-bright);
+      color: var(--navy);
+      font-size: 11px;
+      font-weight: 800;
+      padding: 3px 8px;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+
+    .toolbar-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .btn {
+      border: none;
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 12.5px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-bw {
+      background: #475569;
+      color: #ffffff;
+      border: 1px solid #94a3b8;
+    }
+
+    .btn-dl {
+      background: #0284c7;
+      color: #ffffff;
+    }
+
+    .btn-print {
+      background: var(--gold-bright);
+      color: var(--navy);
+    }
+
+    /* CONTENEDOR A4 */
+    #kit-container {
+      width: 210mm;
+      margin: 0 auto;
+    }
+
+    .a4-page {
+      width: 210mm;
+      height: 296.5mm;
+      min-height: 296.5mm;
+      background: #ffffff;
+      margin: 0 auto 20px auto;
+      padding: 10mm 13mm 9mm 13mm;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      page-break-after: always;
+      break-after: page;
+    }
+
+    .a4-page:last-child {
+      page-break-after: auto;
+      break-after: auto;
+    }
+
+    /* ENCABEZADOS DE PÁGINA */
+    .kit-header {
+      background: var(--navy);
+      color: #ffffff;
+      padding: 8px 14px;
+      border-radius: 6px;
+      border-bottom: 3.5px solid var(--gold-bright);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .kit-header-sup {
+      font-size: 7.5pt;
+      color: var(--gold-bright);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 700;
+    }
+
+    .kit-header-title {
+      font-size: 12.5pt;
+      font-weight: 900;
+      letter-spacing: 0.4px;
+    }
+
+    .kit-badge-right {
+      background: #1e3a8a;
+      border: 1px solid var(--gold-bright);
+      color: #ffffff;
+      font-size: 8pt;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 4px;
+      text-align: right;
+    }
+
+    .page-footer {
+      border-top: 1.5px solid #cbd5e1;
+      padding-top: 5px;
+      font-size: 7.8pt;
+      color: var(--slate);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* ==================== PÁGINA 1: CREDENCIALES ==================== */
+    .teacher-tip-banner {
+      background: #fffbeb;
+      border: 1.5px solid #f59e0b;
+      border-radius: 6px;
+      padding: 7px 12px;
+      font-size: 8.5pt;
+      margin-bottom: 10px;
+    }
+
+    .credentials-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+
+    .credential-card {
+      border: 2px dashed #475569;
+      border-radius: 8px;
+      padding: 8px;
+      background: #ffffff;
+      position: relative;
+    }
+
+    .cut-label {
+      font-size: 7pt;
+      font-weight: 800;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 5px;
+      display: block;
+    }
+
+    .cred-inner {
+      border: 2px solid var(--navy);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .cred-top {
+      background: var(--navy);
+      color: var(--gold-bright);
+      font-size: 8pt;
+      font-weight: 800;
+      text-align: center;
+      padding: 4px 6px;
+      letter-spacing: 0.5px;
+    }
+
+    .cred-body {
+      display: flex;
+      padding: 8px;
+      gap: 8px;
+      align-items: stretch;
+    }
+
+    .cred-photo {
+      width: 68px;
+      height: 82px;
+      border: 1.5px dashed #64748b;
+      border-radius: 4px;
+      background: #f8fafc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-size: 6.8pt;
+      font-weight: 700;
+      color: #64748b;
+      padding: 4px;
+      flex-shrink: 0;
+    }
+
+    .cred-fields {
+      flex: 1;
+      font-size: 8pt;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .cred-line {
+      border-bottom: 1px solid #94a3b8;
+      padding-bottom: 2px;
+      margin-bottom: 4px;
+      font-weight: 700;
+      color: var(--navy);
+    }
+
+    .cred-bottom {
+      background: #e2e8f0;
+      color: var(--navy);
+      font-size: 6.8pt;
+      font-weight: 800;
+      text-align: center;
+      padding: 3px;
+      letter-spacing: 0.6px;
+    }
+
+    .oath-box {
+      background: #0b192c;
+      color: #ffffff;
+      border: 2px solid var(--gold-bright);
+      border-radius: 8px;
+      padding: 12px 16px;
+      text-align: center;
+    }
+
+    .oath-title {
+      color: var(--gold-bright);
+      font-size: 9pt;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 4px;
+    }
+
+    .oath-text {
+      font-size: 10pt;
+      font-style: italic;
+      font-weight: 600;
+    }
+
+    /* ==================== PÁGINAS 2 Y 3: CASOS ==================== */
+    .team-bar {
+      display: grid;
+      grid-template-columns: 1fr 1.3fr;
+      gap: 10px;
+      background: #f1f5f9;
+      border: 1.5px solid #94a3b8;
+      border-radius: 6px;
+      padding: 7px 12px;
+      font-size: 8.8pt;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .case-container {
+      border: 2px solid var(--navy);
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 8px;
+      background: #ffffff;
+    }
+
+    .case-banner {
+      background: var(--navy);
+      color: #ffffff;
+      padding: 5px 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 9.5pt;
+      font-weight: 800;
+    }
+
+    .clue-tag {
+      background: var(--gold-bright);
+      color: var(--navy);
+      font-size: 7.8pt;
+      font-weight: 900;
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+
+    .case-body {
+      padding: 8px 12px;
+    }
+
+    .story-p {
+      font-size: 8.6pt;
+      margin-bottom: 6px;
+      text-align: justify;
+      background: #f8fafc;
+      padding: 5px 8px;
+      border-left: 3.5px solid var(--sky);
+      border-radius: 3px;
+    }
+
+    .instruction-strip {
+      background: #eff6ff;
+      border: 1px solid #93c5fd;
+      color: #1e3a8a;
+      font-size: 8.4pt;
+      font-weight: 800;
+      padding: 4px 8px;
+      border-radius: 4px;
+      margin-bottom: 6px;
+    }
+
+    /* ZONAS DE DIBUJO DESPEJADAS (SIN CARTELES ENCIMA) */
+    .clean-drawing-board {
+      border: 2px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 8px 12px;
+      background: #ffffff;
+      margin-bottom: 7px;
+    }
+
+    .question-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      background: #f8fafc;
+      border-top: 1.5px dashed #cbd5e1;
+      padding-top: 6px;
+    }
+
+    .options-list {
+      font-size: 8.3pt;
+      line-height: 1.45;
+      flex: 1;
+    }
+
+    .opt-letter {
+      display: inline-block;
+      width: 19px;
+      height: 19px;
+      border: 1.5px solid var(--navy);
+      border-radius: 50%;
+      text-align: center;
+      line-height: 16px;
+      font-weight: 800;
+      margin-right: 4px;
+      background: #ffffff;
+    }
+
+    .key-letter-box {
+      background: #fffbeb;
+      border: 2px solid var(--gold);
+      border-radius: 6px;
+      padding: 5px 10px;
+      text-align: center;
+      min-width: 125px;
+    }
+
+    .key-letter-box span {
+      display: block;
+      font-size: 7.2pt;
+      font-weight: 800;
+      color: #92400e;
+      text-transform: uppercase;
+      margin-bottom: 3px;
+    }
+
+    .empty-square {
+      width: 34px;
+      height: 34px;
+      border: 2px solid var(--navy);
+      background: #ffffff;
+      margin: 0 auto;
+      border-radius: 4px;
+    }
+
+    /* ELEMENTOS ESPECÍFICOS CASO 2 Y CASO 4 */
+    .pluto-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1.2fr;
+      gap: 8px;
+      align-items: center;
+      margin-bottom: 7px;
+    }
+
+    .orbit-card {
+      border: 1.5px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 5px;
+      text-align: center;
+      font-size: 7.8pt;
+      font-weight: 700;
+    }
+
+    .mini-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 8.2pt;
+    }
+
+    .mini-table th, .mini-table td {
+      border: 1.5px solid var(--navy);
+      padding: 4px 6px;
+    }
+
+    .mini-table th {
+      background: #e2e8f0;
+      color: var(--navy);
+    }
+
+    .intruders-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin: 6px 0;
+    }
+
+    .intruder-card {
+      border: 2px solid var(--navy);
+      border-radius: 6px;
+      padding: 8px;
+      text-align: center;
+      font-weight: 800;
+      font-size: 9pt;
+      background: #ffffff;
+    }
+
+    /* ==================== PÁGINA 4: DECODIFICADOR SIN DIPLOMA ==================== */
+    .vault-container {
+      background: var(--navy);
+      color: #ffffff;
+      border-radius: 10px;
+      padding: 16px 20px;
+      border: 3px solid var(--gold-bright);
+      text-align: center;
+      margin-bottom: 14px;
+    }
+
+    .vault-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin: 12px 0 16px 0;
+    }
+
+    .vault-slot {
+      background: #1e293b;
+      border: 2px solid #64748b;
+      border-radius: 8px;
+      padding: 10px;
+    }
+
+    .vault-slot-label {
+      font-size: 8pt;
+      color: #cbd5e1;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .vault-input-box {
+      width: 52px;
+      height: 52px;
+      background: #ffffff;
+      border: 3px solid var(--gold-bright);
+      border-radius: 6px;
+      margin: 0 auto;
+    }
+
+    .final-word-banner {
+      background: var(--gold-bright);
+      color: var(--navy);
+      padding: 12px;
+      border-radius: 8px;
+      font-weight: 900;
+      font-size: 13pt;
+      letter-spacing: 1px;
+    }
+
+    .nebulosa-info-card {
+      background: #f0f9ff;
+      border: 2px solid #0284c7;
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin-bottom: 14px;
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .mission-complete-card {
+      border: 2.5px dashed var(--navy);
+      border-radius: 8px;
+      padding: 12px 16px;
+      background: #ffffff;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    /* MODO BLANCO Y NEGRO (FOTOCOPIA) */
+    body.bw-mode .kit-header,
+    body.bw-mode .cred-top,
+    body.bw-mode .oath-box,
+    body.bw-mode .case-banner,
+    body.bw-mode .vault-container {
+      background: #ffffff !important;
+      color: #000000 !important;
+      border: 2px solid #000000 !important;
+    }
+    body.bw-mode .kit-header-sup,
+    body.bw-mode .oath-title,
+    body.bw-mode .vault-slot-label {
+      color: #000000 !important;
+    }
+    body.bw-mode .vault-slot {
+      background: #f8fafc !important;
+      border-color: #000000 !important;
+    }
+
+    @page {
+      size: A4 portrait;
+      margin: 0;
+    }
+
+    @media print {
+      body {
+        background: #ffffff;
+        padding: 0;
+      }
+      .toolbar {
+        display: none !important;
+      }
+      #kit-container {
+        width: 210mm;
+      }
+      .a4-page {
+        margin: 0;
+        box-shadow: none;
+        width: 210mm;
+        height: 296.5mm;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- BARRA FLOTANTE DE DESCARGA -->
+  <div class="toolbar">
+    <div class="toolbar-title">
+      <span class="toolbar-badge">Kit 5 Páginas Corregido</span>
+      Expediente "Detectives del Cosmos" (Espacios de dibujo limpios y sin el mini-diploma)
+    </div>
+    <div class="toolbar-actions">
+      <button class="btn btn-bw" onclick="document.body.classList.toggle('bw-mode')">
+        🖨️ Modo Fotocopia B/N
+      </button>
+      <button class="btn btn-dl" onclick="descargarKitPDF()">
+        📥 Descargar PDF (1 Clic)
+      </button>
+      <button class="btn btn-print" onclick="window.print()">
+        ✨ Guardar como PDF (Calidad Original)
+      </button>
+    </div>
+  </div>
+
+  <div id="kit-container">
+
+    <!-- ==================== PÁGINA 1: CREDENCIALES ==================== -->
+    <section class="a4-page">
+      <div>
+        <header class="kit-header">
+          <div>
+            <div class="kit-header-sup">Agencia Intergaláctica de Investigación Astronómica</div>
+            <div class="kit-header-title">DETECTIVES DEL COSMOS — KIT DE MISIÓN</div>
+          </div>
+          <div class="kit-badge-right">
+            5.° Grado de Primaria<br />Credenciales Recortables
+          </div>
+        </header>
+
+        <div class="teacher-tip-banner">
+          <strong>📌 PARA EL/LA DOCENTE:</strong> Imprimí esta página y recortá las 4 credenciales para entregar una a cada detective al comenzar la misión. ¡Las páginas 2, 3 y 4 forman el Tablero de Misión para cada equipo!
+        </div>
+
+        <div class="credentials-grid">
+          <!-- CREDENCIAL 1 -->
+          <div class="credential-card">
+            <span class="cut-label">✂️ Recortar por la línea punteada</span>
+            <div class="cred-inner">
+              <div class="cred-top">★ CREDENCIAL DE DETECTIVE DEL COSMOS ★</div>
+              <div class="cred-body">
+                <div class="cred-photo">DIBUJATE<br />O PEGÁ<br />TU FOTO</div>
+                <div class="cred-fields">
+                  <div class="cred-line">Agente: ______________________</div>
+                  <div class="cred-line">Equipo: ______________________</div>
+                  <div class="cred-line">Grado: 5.° | Planeta fav.: ________</div>
+                  <div class="cred-line" style="margin-bottom:0;">Firma: _______________________</div>
+                </div>
+              </div>
+              <div class="cred-bottom">LICENCIA OFICIAL — AGENCIA INTERGALÁCTICA</div>
+            </div>
+          </div>
+
+          <!-- CREDENCIAL 2 -->
+          <div class="credential-card">
+            <span class="cut-label">✂️ Recortar por la línea punteada</span>
+            <div class="cred-inner">
+              <div class="cred-top">★ CREDENCIAL DE DETECTIVE DEL COSMOS ★</div>
+              <div class="cred-body">
+                <div class="cred-photo">DIBUJATE<br />O PEGÁ<br />TU FOTO</div>
+                <div class="cred-fields">
+                  <div class="cred-line">Agente: ______________________</div>
+                  <div class="cred-line">Equipo: ______________________</div>
+                  <div class="cred-line">Grado: 5.° | Planeta fav.: ________</div>
+                  <div class="cred-line" style="margin-bottom:0;">Firma: _______________________</div>
+                </div>
+              </div>
+              <div class="cred-bottom">LICENCIA OFICIAL — AGENCIA INTERGALÁCTICA</div>
+            </div>
+          </div>
+
+          <!-- CREDENCIAL 3 -->
+          <div class="credential-card">
+            <span class="cut-label">✂️ Recortar por la línea punteada</span>
+            <div class="cred-inner">
+              <div class="cred-top">★ CREDENCIAL DE DETECTIVE DEL COSMOS ★</div>
+              <div class="cred-body">
+                <div class="cred-photo">DIBUJATE<br />O PEGÁ<br />TU FOTO</div>
+                <div class="cred-fields">
+                  <div class="cred-line">Agente: ______________________</div>
+                  <div class="cred-line">Equipo: ______________________</div>
+                  <div class="cred-line">Grado: 5.° | Planeta fav.: ________</div>
+                  <div class="cred-line" style="margin-bottom:0;">Firma: _______________________</div>
+                </div>
+              </div>
+              <div class="cred-bottom">LICENCIA OFICIAL — AGENCIA INTERGALÁCTICA</div>
+            </div>
+          </div>
+
+          <!-- CREDENCIAL 4 -->
+          <div class="credential-card">
+            <span class="cut-label">✂️ Recortar por la línea punteada</span>
+            <div class="cred-inner">
+              <div class="cred-top">★ CREDENCIAL DE DETECTIVE DEL COSMOS ★</div>
+              <div class="cred-body">
+                <div class="cred-photo">DIBUJATE<br />O PEGÁ<br />TU FOTO</div>
+                <div class="cred-fields">
+                  <div class="cred-line">Agente: ______________________</div>
+                  <div class="cred-line">Equipo: ______________________</div>
+                  <div class="cred-line">Grado: 5.° | Planeta fav.: ________</div>
+                  <div class="cred-line" style="margin-bottom:0;">Firma: _______________________</div>
+                </div>
+              </div>
+              <div class="cred-bottom">LICENCIA OFICIAL — AGENCIA INTERGALÁCTICA</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="oath-box">
+          <div class="oath-title">✋ Juramento Oficial de los Detectives del Cosmos (Para leer en voz alta)</div>
+          <div class="oath-text">
+            "¡Prometemos observar con ojos de científicos, trabajar en equipo sin dejar a ningún astronauta atrás y usar las pistas del Universo para descubrir las 4 Letras Clave del Cosmos!"
+          </div>
+        </div>
+      </div>
+
+      <footer class="page-footer">
+        <span>Detectives del Cosmos (5.° Grado) — Credenciales Recortables</span>
+        <span>Página 1 de 5</span>
+      </footer>
+    </section>
+
+    <!-- ==================== PÁGINA 2: CASOS 1 Y 2 ==================== -->
+    <section class="a4-page">
+      <div>
+        <header class="kit-header">
+          <div>
+            <div class="kit-header-sup">Agencia Intergaláctica de Investigación Astronómica</div>
+            <div class="kit-header-title">EXPEDIENTE DE EQUIPO — MISIÓN PARTE 1</div>
+          </div>
+          <div class="kit-badge-right">
+            CÓDIGO: EXP-COSMOS-5G<br />Casos #1 y #2
+          </div>
+        </header>
+
+        <div class="team-bar">
+          <div>Nombre de la Patrulla / Equipo: ___________________________</div>
+          <div>Detectives del Grupo: ________________________________________</div>
+        </div>
+
+        <!-- CASO 1: NEPTUNO Y URANO (ESPACIO DE DIBUJO 100% DESPEJADO) -->
+        <div class="case-container">
+          <div class="case-banner">
+            <span>CASO 1: EL PLANETA QUE SE TAMBALEA</span>
+            <span class="clue-tag">PISTA #1</span>
+          </div>
+          <div class="case-body">
+            <p class="story-p">
+              <strong>¡Alerta en el telescopio!</strong> El planeta <strong>Urano</strong> no viaja derechito por su órbita: va haciendo un "bamboleo" en zigzag, como si alguien invisible lo estuviera tironeando desde más lejos. Usando matemáticas, los científicos descubrieron que ese vecino oculto era <strong>Neptuno</strong>.
+            </p>
+
+            <div class="instruction-strip">
+              ✏️ DESAFÍO EN GRUPO: En el recuadro blanco central (entre los dos planetas), dibujen una FLECHA GRANDE desde NEPTUNO hacia URANO para mostrar quién lo tironea con su gravedad:
+            </div>
+
+            <!-- DIAGRAMA LIMPIO SIN TEXTO QUE TAPE EL LUGAR DE LA FLECHA -->
+            <div class="clean-drawing-board">
+              <svg width="100%" height="92" viewBox="0 0 640 92" xmlns="http://www.w3.org/2000/svg">
+                <!-- Leyenda arriba a la izquierda -->
+                <line x1="12" y1="14" x2="48" y2="14" stroke="#64748b" stroke-width="2" stroke-dasharray="5 4"/>
+                <text x="55" y="18" font-size="11" fill="#475569" font-family="Arial">Camino normal esperado</text>
+
+                <path d="M 12 32 Q 22 24, 32 32 T 52 32" stroke="#0284c7" stroke-width="2.5" fill="none"/>
+                <text x="58" y="35" font-size="11" font-weight="bold" fill="#0284c7" font-family="Arial">Camino real (con bamboleo)</text>
+
+                <!-- Órbita normal vs bamboleo de Urano -->
+                <line x1="210" y1="12" x2="210" y2="85" stroke="#94a3b8" stroke-width="2" stroke-dasharray="5 4"/>
+                <path d="M 210 10 C 185 26, 235 42, 210 58 C 185 72, 230 82, 210 90" stroke="#0284c7" stroke-width="2.5" fill="none"/>
+
+                <!-- Planeta URANO -->
+                <circle cx="210" cy="52" r="18" fill="#38bdf8" stroke="#0b192c" stroke-width="2.5"/>
+                <text x="160" y="84" font-size="12" font-weight="bold" fill="#0b192c" font-family="Arial">URANO</text>
+
+                <!-- ZONA CENTRAL 100% VACÍA Y LIMPIA PARA DIBUJAR LA FLECHA -->
+                <rect x="248" y="16" width="245" height="62" rx="8" fill="#ffffff" stroke="#0284c7" stroke-width="2" stroke-dasharray="6 4"/>
+
+                <!-- Planeta NEPTUNO -->
+                <circle cx="545" cy="48" r="22" fill="#1e3a8a" stroke="#0b192c" stroke-width="2.5"/>
+                <text x="512" y="84" font-size="12" font-weight="bold" fill="#1e3a8a" font-family="Arial">NEPTUNO (Vecino Gigante)</text>
+              </svg>
+            </div>
+
+            <div class="question-footer">
+              <div class="options-list">
+                <strong>PREGUNTA DE DEDUCCIÓN: ¿Qué provocaba el extraño bamboleo de Urano?</strong> (Rodeen la opción correcta)<br />
+                <span class="opt-letter">A</span> Fuertes vientos que soplaban desde el Sol.<br />
+                <span class="opt-letter">N</span> El tirón de gravedad de su vecino gigante Neptuno.<br />
+                <span class="opt-letter">C</span> Que Urano se estaba quedando sin hielo.
+              </div>
+              <div class="key-letter-box">
+                <span>1.ª Letra Clave:</span>
+                <div class="empty-square"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CASO 2: PLUTÓN -->
+        <div class="case-container" style="margin-bottom: 0;">
+          <div class="case-banner">
+            <span>CASO 2: ¿POR QUÉ PLUTÓN YA NO ES UN PLANETA?</span>
+            <span class="clue-tag">PISTA #2</span>
+          </div>
+          <div class="case-body">
+            <p class="story-p">
+              Durante 70 años Plutón fue el 9.° planeta. Pero en 2006 los astrónomos pusieron <strong>3 reglas obligatorias</strong> para ser planeta auténtico. Como Plutón vive en el Cinturón de Kuiper (lleno de rocas y hielos), ¡falló en una regla!
+            </p>
+
+            <div class="instruction-strip">
+              ✏️ DESAFÍO EN GRUPO: Miren los dos dibujos de abajo y escriban SÍ o NO en la tabla de control de Plutón:
+            </div>
+
+            <div class="pluto-grid">
+              <div class="orbit-card">
+                <div>PLANETA (Camino limpio)</div>
+                <svg width="130" height="72" viewBox="0 0 130 72">
+                  <circle cx="65" cy="36" r="9" fill="#fbbf24" stroke="#d97706" stroke-width="1.5"/>
+                  <ellipse cx="65" cy="36" rx="52" ry="24" fill="none" stroke="#1e3a8a" stroke-width="2" stroke-dasharray="4 3"/>
+                  <circle cx="117" cy="36" r="6" fill="#0284c7" stroke="#0b192c" stroke-width="1.5"/>
+                </svg>
+              </div>
+
+              <div class="orbit-card">
+                <div>PLUTÓN (Lleno de rocas)</div>
+                <svg width="130" height="72" viewBox="0 0 130 72">
+                  <circle cx="65" cy="36" r="9" fill="#fbbf24" stroke="#d97706" stroke-width="1.5"/>
+                  <ellipse cx="65" cy="36" rx="52" ry="24" fill="none" stroke="#991b1b" stroke-width="2" stroke-dasharray="3 3"/>
+                  <!-- Rocas y escombros en la órbita -->
+                  <circle cx="20" cy="25" r="3" fill="#64748b"/><circle cx="32" cy="16" r="2.5" fill="#94a3b8"/>
+                  <circle cx="95" cy="18" r="3.5" fill="#64748b"/><circle cx="108" cy="48" r="3" fill="#64748b"/>
+                  <circle cx="45" cy="57" r="3" fill="#64748b"/><circle cx="82" cy="56" r="2.5" fill="#94a3b8"/>
+                  <circle cx="15" cy="42" r="2.5" fill="#64748b"/>
+                  <circle cx="117" cy="36" r="5" fill="#dc2626" stroke="#0b192c" stroke-width="1.5"/>
+                </svg>
+              </div>
+
+              <table class="mini-table">
+                <thead>
+                  <tr>
+                    <th>Las 3 Reglas del Planeta</th>
+                    <th style="text-align: center; width: 38%;">¿Cumple Plutón?</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>1. ¿Da vueltas al Sol?</td>
+                    <td style="text-align: center; font-weight: 900; color: #166534;">[ SÍ ]</td>
+                  </tr>
+                  <tr>
+                    <td>2. ¿Es redondo?</td>
+                    <td style="text-align: center; font-weight: 800;">[ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ]</td>
+                  </tr>
+                  <tr>
+                    <td>3. ¿Limpió su camino?</td>
+                    <td style="text-align: center; font-weight: 800;">[ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ]</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <div class="question-footer">
+              <div class="options-list">
+                <strong>PREGUNTA DE DEDUCCIÓN: ¿Por qué Plutón pasó a llamarse "Planeta Enano"?</strong><br />
+                <span class="opt-letter">A</span> Porque dejó de girar alrededor del Sol.<br />
+                <span class="opt-letter">B</span> Porque es cuadrado como una caja.<br />
+                <span class="opt-letter">U</span> Porque no limpió su órbita de rocas y escombros helados.
+              </div>
+              <div class="key-letter-box">
+                <span>2.ª Letra Clave:</span>
+                <div class="empty-square"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer class="page-footer">
+        <span>Detectives del Cosmos (5.° Grado) — Tablero de Misión (Casos 1 y 2)</span>
+        <span>Página 2 de 5</span>
+      </footer>
+    </section>
+
+    <!-- ==================== PÁGINA 3: CASOS 3 Y 4 ==================== -->
+    <section class="a4-page">
+      <div>
+        <header class="kit-header">
+          <div>
+            <div class="kit-header-sup">Agencia Intergaláctica de Investigación Astronómica</div>
+            <div class="kit-header-title">EXPEDIENTE DE EQUIPO — MISIÓN PARTE 2</div>
+          </div>
+          <div class="kit-badge-right">
+            CÓDIGO: EXP-COSMOS-5G<br />Casos #3 y #4
+          </div>
+        </header>
+
+        <!-- CASO 3: EL COMETA (RECUADRO DE DIBUJO 100% VACÍO Y DESPEJADO) -->
+        <div class="case-container">
+          <div class="case-banner">
+            <span>CASO 3: LA BOLA DE NIEVE SUCIA (EL COMETA)</span>
+            <span class="clue-tag">PISTA #3</span>
+          </div>
+          <div class="case-body">
+            <p class="story-p">
+              Un <strong>cometa</strong> es una bola congelada de hielo, roca y polvo. Cuando se acerca al Sol, el calor derrite su hielo y forma una nube brillante (<em>coma</em>). Además, el <strong>viento solar</strong> sopla fortísimo desde el Sol como un ventilador gigante y empuja ese gas formando su famosa cola.
+            </p>
+
+            <div class="instruction-strip">
+              ✏️ DESAFÍO EN GRUPO: Miren hacia dónde soplan las flechas del Viento Solar y DIBUJEN LA COLA DE GAS DEL COMETA adentro del gran recuadro punteado vacío de la derecha:
+            </div>
+
+            <!-- DIAGRAMA DEL COMETA CON EL RECUADRO PUNTEADO TOTALMENTE LIMPIO POR DENTRO -->
+            <div class="clean-drawing-board">
+              <svg width="100%" height="105" viewBox="0 0 640 105" xmlns="http://www.w3.org/2000/svg">
+                <!-- SOL -->
+                <circle cx="48" cy="52" r="34" fill="#fbbf24" stroke="#d97706" stroke-width="2.5"/>
+                <text x="33" y="57" font-size="14" font-weight="bold" fill="#0b192c" font-family="Arial">SOL</text>
+
+                <!-- FLECHAS VIENTO SOLAR -->
+                <text x="100" y="18" font-size="11" font-weight="bold" fill="#d97706" font-family="Arial">VIENTO SOLAR (Sopla fuerte)</text>
+                <line x1="98" y1="32" x2="215" y2="32" stroke="#f59e0b" stroke-width="3"/>
+                <polygon points="215,26 227,32 215,38" fill="#f59e0b"/>
+
+                <line x1="98" y1="52" x2="215" y2="52" stroke="#f59e0b" stroke-width="3"/>
+                <polygon points="215,46 227,52 215,58" fill="#f59e0b"/>
+
+                <line x1="98" y1="72" x2="215" y2="72" stroke="#f59e0b" stroke-width="3"/>
+                <polygon points="215,66 227,72 215,78" fill="#f59e0b"/>
+
+                <!-- NÚCLEO Y COMA DEL COMETA -->
+                <circle cx="270" cy="52" r="24" fill="#e0f2fe" stroke="#0284c7" stroke-width="2" stroke-dasharray="4 3"/>
+                <circle cx="270" cy="52" r="11" fill="#334155" stroke="#0b192c" stroke-width="2"/>
+                <text x="215" y="96" font-size="11" font-weight="bold" fill="#0b192c" font-family="Arial">COMETA (Hielo y Polvo)</text>
+
+                <!-- RECUADRO PUNTEADO 100% BLANCO Y VACÍO PARA QUE DIBUJEN LA COLA SIN ESTORBOS -->
+                <rect x="302" y="12" width="325" height="76" rx="10" fill="#ffffff" stroke="#0284c7" stroke-width="2.5" stroke-dasharray="7 5"/>
+              </svg>
+            </div>
+
+            <div class="question-footer">
+              <div class="options-list">
+                <strong>PREGUNTA DE DEDUCCIÓN: ¿Hacia dónde apunta SIEMPRE la cola de gas de un cometa?</strong><br />
+                <span class="opt-letter">B</span> Siempre hacia el lado opuesto al Sol, empujada por el viento solar.<br />
+                <span class="opt-letter">A</span> Siempre apuntando hacia adentro del Sol.<br />
+                <span class="opt-letter">C</span> Enroscada en espiral sobre los planetas.
+              </div>
+              <div class="key-letter-box">
+                <span>3.ª Letra Clave:</span>
+                <div class="empty-square"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CASO 4: ANILLOS DE SATURNO -->
+        <div class="case-container" style="margin-bottom: 0;">
+          <div class="case-banner">
+            <span>CASO 4: LOS ANILLOS JÓVENES DE SATURNO (LA LUNA CRISÁLIDA)</span>
+            <span class="clue-tag">PISTA #4</span>
+          </div>
+          <div class="case-body">
+            <p class="story-p">
+              ¡Los anillos de Saturno son un 99 % de hielo puro y brillante porque son súper jóvenes! Hace unos <strong>100 millones de años</strong>, una antigua luna de hielo llamada <strong>Crisálida</strong> se acercó demasiado a Saturno y la enorme gravedad del planeta la despedazó en millones de trocitos de hielo.
+            </p>
+
+            <div class="clean-drawing-board" style="padding: 6px 10px; background: #f8fafc;">
+              <div style="display: flex; justify-content: space-around; align-items: center; font-size: 8pt; font-weight: 700; text-align: center;">
+                <div>1. Saturno y su luna Crisálida</div>
+                <div style="font-size: 13pt; color: #d97706;">➔</div>
+                <div>2. ¡La gravedad estira y rompe la luna!</div>
+                <div style="font-size: 13pt; color: #d97706;">➔</div>
+                <div>3. Nacen los anillos de hielo (Hace 100 M de años)</div>
+              </div>
+            </div>
+
+            <div class="instruction-strip">
+              ✏️ DESAFÍO EN GRUPO: Tachen con una cruz grande (X) los DOS intrusos que NO vivían en la Tierra hace 100 millones de años:
+            </div>
+
+            <div class="intruders-grid">
+              <div class="intruder-card">🏰 Caballeros Medievales</div>
+              <div class="intruder-card">🦖 LOS DINOSAURIOS</div>
+              <div class="intruder-card">🤖 Robots Espaciales</div>
+            </div>
+
+            <div class="question-footer">
+              <div class="options-list">
+                <strong>PREGUNTA DE DEDUCCIÓN: ¿Quiénes habitaban la Tierra cuando nacieron los anillos de Saturno?</strong><br />
+                <span class="opt-letter">A</span> Solo microbios invisibles en el mar (hace 3.500 millones de años).<br />
+                <span class="opt-letter">E</span> ¡Los dinosaurios! (hace 100 a 160 millones de años).<br />
+                <span class="opt-letter">C</span> Los primeros astrónomos con telescopios.
+              </div>
+              <div class="key-letter-box">
+                <span>4.ª Letra Clave:</span>
+                <div class="empty-square"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <footer class="page-footer">
+        <span>Detectives del Cosmos (5.° Grado) — Tablero de Misión (Casos 3 y 4)</span>
+        <span>Página 3 de 5</span>
+      </footer>
+    </section>
+
+    <!-- ==================== PÁGINA 4: DECODIFICADOR (SIN MINI DIPLOMA) ==================== -->
+    <section class="a4-page">
+      <div style="display: flex; flex-direction: column; height: 100%; justify-content: space-between;">
+        <div>
+          <header class="kit-header">
+            <div>
+              <div class="kit-header-sup">Agencia Intergaláctica de Investigación Astronómica</div>
+              <div class="kit-header-title">EL DECODIFICADOR SECRETO DEL COSMOS</div>
+            </div>
+            <div class="kit-badge-right">
+              MISIÓN FINAL<br />Apertura del Cofre
+            </div>
+          </header>
+
+          <p style="font-size: 9.5pt; font-weight: 700; text-align: center; margin: 8px 0 10px 0;">
+            ¡Llegó el momento de la verdad, Detectives! Copien en orden las 4 Letras Clave que descubrieron en los casos para revelar el secreto mejor guardado del Universo:
+          </p>
+
+          <!-- COFRE DECODIFICADOR -->
+          <div class="vault-container">
+            <div style="font-size: 11pt; font-weight: 900; color: var(--gold-bright); letter-spacing: 1px; text-transform: uppercase;">
+              🔓 COFRE DECODIFICADOR DE LA AGENCIA INTERGALÁCTICA
+            </div>
+
+            <div class="vault-grid">
+              <div class="vault-slot">
+                <div class="vault-slot-label">CASO 1 (Neptuno)</div>
+                <div class="vault-input-box"></div>
+              </div>
+              <div class="vault-slot">
+                <div class="vault-slot-label">CASO 2 (Plutón)</div>
+                <div class="vault-input-box"></div>
+              </div>
+              <div class="vault-slot">
+                <div class="vault-slot-label">CASO 3 (Cometa)</div>
+                <div class="vault-input-box"></div>
+              </div>
+              <div class="vault-slot">
+                <div class="vault-slot-label">CASO 4 (Saturno)</div>
+                <div class="vault-input-box"></div>
+              </div>
+            </div>
+
+            <div class="final-word-banner">
+              PALABRA SECRETA DESCIFRADA: &nbsp; [ _____ ] &nbsp; [ _____ ] &nbsp; [ _____ ] &nbsp; [ _____ ]
+            </div>
+          </div>
+
+          <!-- EXPLICACIÓN DE LA NEBULOSA -->
+          <div class="nebulosa-info-card">
+            <svg width="72" height="72" viewBox="0 0 80 80" style="flex-shrink: 0;">
+              <circle cx="40" cy="40" r="36" fill="#0b192c"/>
+              <ellipse cx="40" cy="40" rx="28" ry="18" transform="rotate(-25 40 40)" fill="#7c3aed" opacity="0.6"/>
+              <ellipse cx="42" cy="38" rx="20" ry="12" transform="rotate(15 42 38)" fill="#ec4899" opacity="0.6"/>
+              <circle cx="28" cy="32" r="2.5" fill="#fbbf24"/>
+              <circle cx="48" cy="28" r="2" fill="#ffffff"/>
+              <circle cx="52" cy="46" r="2.5" fill="#38bdf8"/>
+              <circle cx="35" cy="48" r="1.8" fill="#ffffff"/>
+            </svg>
+            <div>
+              <div style="font-size: 10.5pt; font-weight: 900; color: #0369a1; margin-bottom: 4px;">
+                🌟 ¿QUÉ SIGNIFICA EL CÓDIGO SECRETO EN EL ESPACIO?
+              </div>
+              <p style="font-size: 9.2pt; text-align: justify; color: #0f172a;">
+                ¡Las estrellas y los planetas nacen adentro de una gigantesca <strong>NUBE</strong> espacial llamada <strong>NEBULOSA</strong>! Estas nubes cósmicas están llenas de gas y polvo estelar. Hace <strong>4.600 millones de años</strong>, la gravedad apretó una de estas grandes nubes y así nacieron nuestro Sol y todos los planetas del Sistema Solar.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- REEMPLAZO DEL MINI-DIPLOMA: DIBUJO DE LA NEBULOSA Y PASE AL DIPLOMA OFICIAL -->
+        <div class="mission-complete-card">
+          <div>
+            <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #e2e8f0; padding-bottom: 6px; margin-bottom: 8px;">
+              <span style="font-size: 10pt; font-weight: 900; color: var(--navy);">
+                🎨 REGISTRO VISUAL DE LA PATRULLA: ¡DIBUJEN SU PROPIA NEBULOSA Y LAS ESTRELLAS NACIENDO!
+              </span>
+              <span style="background: #dcfce7; color: #166534; font-size: 7.8pt; font-weight: 800; padding: 3px 8px; border-radius: 4px; border: 1px solid #86efac;">
+                ✔ HABILITADOS PARA EL DIPLOMA OFICIAL
+              </span>
+            </div>
+            <!-- ESPACIO BLANCO LIMPIO PARA DIBUJAR -->
+            <div style="height: 155px; border: 2px dashed #94a3b8; border-radius: 8px; background: #ffffff;"></div>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-top: 12px; font-size: 8.8pt; font-weight: 700; color: var(--navy);">
+            <div>Firma de los Detectives del Equipo: _____________________________________</div>
+            <div>Visto Bueno del Comandante / Docente: _______________________</div>
+          </div>
+        </div>
+
+        <footer class="page-footer" style="margin-top: 10px;">
+          <span>Detectives del Cosmos (5.° Grado) — Decodificador Final y Registro de Patrulla</span>
+          <span>Página 4 de 5</span>
+        </footer>
+      </div>
+    </section>
+
+    <!-- ==================== PÁGINA 5: GUÍA DOCENTE ==================== -->
+    <section class="a4-page">
+      <div>
+        <header class="kit-header">
+          <div>
+            <div class="kit-header-sup">Material Exclusivo para el Tallerista y Docente de Grado</div>
+            <div class="kit-header-title">GUÍA RÁPIDA Y SOLUCIONARIO — DETECTIVES DEL COSMOS</div>
+          </div>
+          <div class="kit-badge-right">
+            HOJA DOCENTE<br />Solucionario y Experimentos
+          </div>
+        </header>
+
+        <div class="case-container">
+          <div class="case-banner">
+            <span>1. CÓMO USAR ESTE KIT EN TU CLASE INTERACTIVA (PASO A PASO)</span>
+          </div>
+          <div class="case-body" style="font-size: 8.8pt; line-height: 1.45;">
+            <p style="margin-bottom: 6px;">
+              • <strong>Impresión económica e inteligente:</strong> Imprimí las <em>Credenciales (Página 1)</em> según la cantidad de alumnos (entran 4 por hoja) y solo un juego de las <em>Páginas 2, 3 y 4</em> por cada grupo de 3 a 5 chicos. El <strong>Diploma Oficial</strong> se entrega en hoja aparte al finalizar.
+            </p>
+            <p>
+              • <strong>Ritmo "Posta por Posta" (sin lectura pesada):</strong> En lugar de que lean solos en silencio, contales vos cada misterio con suspenso durante 2 minutos en el pizarrón y dales 3 minutos por reloj para que resuelvan en equipo el dibujo/desafío de esa tarjeta y elijan la Letra Clave.
+            </p>
+          </div>
+        </div>
+
+        <div class="case-container">
+          <div class="case-banner">
+            <span>2. SOLUCIONARIO RÁPIDO DE LOS 4 CASOS (PALABRA CLAVE: N U B E)</span>
+          </div>
+          <div class="case-body">
+            <table class="mini-table" style="font-size: 8.5pt;">
+              <thead>
+                <tr>
+                  <th style="width: 12%;">Caso</th>
+                  <th style="width: 28%;">Desafío Práctico en la Hoja</th>
+                  <th style="width: 48%;">Respuesta Correcta y Explicación</th>
+                  <th style="width: 12%; text-align: center;">Letra</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Caso 1</strong></td>
+                  <td>Dibujar flecha en la caja limpia desde Neptuno hacia Urano.</td>
+                  <td><strong>Opción N:</strong> La gravedad de Neptuno tironea a Urano causando el bamboleo en su órbita.</td>
+                  <td style="text-align: center; font-weight: 900; font-size: 11pt; color: #1e3a8a;">N</td>
+                </tr>
+                <tr>
+                  <td><strong>Caso 2</strong></td>
+                  <td>Completar <strong>SÍ / SÍ / NO</strong> en la tabla de control.</td>
+                  <td><strong>Opción U:</strong> Plutón gira alrededor del Sol y es esférico, pero NO limpió su órbita en el Cinturón de Kuiper.</td>
+                  <td style="text-align: center; font-weight: 900; font-size: 11pt; color: #1e3a8a;">U</td>
+                </tr>
+                <tr>
+                  <td><strong>Caso 3</strong></td>
+                  <td>Dibujar la cola hacia la derecha adentro del recuadro punteado vacío.</td>
+                  <td><strong>Opción B:</strong> El viento solar empuja el gas del cometa siempre en dirección opuesta al Sol.</td>
+                  <td style="text-align: center; font-weight: 900; font-size: 11pt; color: #1e3a8a;">B</td>
+                </tr>
+                <tr>
+                  <td><strong>Caso 4</strong></td>
+                  <td>Tachar Caballeros y Robots; dejar <strong>Los Dinosaurios</strong>.</td>
+                  <td><strong>Opción E:</strong> La luna helada Crisálida se rompió por gravedad hace 100 millones de años (Era de los Dinosaurios).</td>
+                  <td style="text-align: center; font-weight: 900; font-size: 11pt; color: #1e3a8a;">E</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="case-container" style="margin-bottom: 0;">
+          <div class="case-banner">
+            <span>3. TRES MINI-EXPERIMENTOS VISUALES PARA HACER EN VIVO FRENTE AL GRADO</span>
+          </div>
+          <div class="case-body" style="font-size: 8.7pt; line-height: 1.5;">
+            <p style="margin-bottom: 8px;">
+              <strong>1. El Tirón Invisible (Para el Caso 1):</strong> Dos chicos pasan al frente tomados de una soga corta: uno hace de Urano caminando en línea recta y el otro (haciendo de Neptuno) le da pequeños tironcitos suaves para que toda la clase vea cómo Urano "se tambalea".
+            </p>
+            <p style="margin-bottom: 8px;">
+              <strong>2. El Cometa y el Secador de Pelo (Para el Caso 3):</strong> Atá tiritas de papel crepé o cintas livianas a una pelotita de telgopor o bollito de papel aluminio. Usá una linterna (el Sol) y un abanico o secador de pelo en frío (el viento solar) para que vean cómo la cola siempre apunta alejándose del Sol.
+            </p>
+            <p>
+              <strong>3. Cierre con Foto Sorpresa y Entrega del Diploma Oficial (Al descubrir la palabra NUBE):</strong> Cuando todos los equipos griten <em>"¡NUBE!"</em>, mostrales en pantalla una foto de la Nebulosa de Orión o los Pilares de la Creación y entregales el <strong>Diploma Oficial de Detectives del Cosmos</strong> diseñado aparte.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <footer class="page-footer">
+        <span>Detectives del Cosmos (5.° Grado) — Guía Docente y Solucionario</span>
+        <span>Página 5 de 5</span>
+      </footer>
+    </section>
+
+  </div>
+
+  <script>
+    function descargarKitPDF() {
+      const elemento = document.getElementById('kit-container');
+      const opciones = {
+        margin: 0,
+        filename: 'Expediente_Detectives_del_Cosmos_5to_Grado_Corregido.pdf',
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true, scrollY: 0 },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+        pagebreak: { mode: ['css'] }
+      };
+      html2pdf().set(opciones).from(elemento).save();
+    }
+  </script>
+</body>
+</html>
