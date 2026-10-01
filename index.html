@@ -1341,24 +1341,31 @@
 </style>
 
 <script>
-  // Activa la protección por defecto al abrir el link
   document.body.classList.add('protected-mode');
 
-  // Bloquea clic derecho y atajos Ctrl+P / Ctrl+S / Ctrl+U cuando está protegido
+  function calcularCodigoSecreto(str) {
+    const limpio = str.trim();
+    let h = 5381;
+    for (let i = 0; i < limpio.length; i++) {
+      h = (h * 33) + limpio.charCodeAt(i);
+    }
+    return h;
+  }
+
   document.addEventListener('contextmenu', function(e) {
     if (document.body.classList.contains('protected-mode')) e.preventDefault();
   });
 
   document.addEventListener('keydown', function(e) {
     if (document.body.classList.contains('protected-mode')) {
-      if ((e.ctrlKey || e.metaKey) && ['p', 's', 'u', 'c'].includes(e.key.toLowerCase())) {
+      const k = e.key.toLowerCase();
+      if (e.key === 'F12' || ((e.ctrlKey || e.metaKey) && ['p', 's', 'u', 'c'].includes(k)) || ((e.ctrlKey || e.metaKey) && e.shiftKey && ['i', 'j', 'c'].includes(k))) {
         e.preventDefault();
-        alert('🔒 Vista previa de evaluación. La impresión y descarga están reservadas para el tallerista a cargo (Ezequiel Velasquez Jeandet).');
+        alert('🔒 Vista previa de evaluación. Impresión reservada al tallerista Ezequiel Velasquez Jeandet.');
       }
     }
   });
 
-  // Agrega el botón de desbloqueo en la barra superior
   window.addEventListener('DOMContentLoaded', function() {
     const actionsBar = document.querySelector('.toolbar-actions');
     if (actionsBar) {
@@ -1367,12 +1374,12 @@
       btnUnlock.innerHTML = '🔐 Desbloquear (Solo Tallerista)';
       btnUnlock.onclick = function() {
         const clave = prompt('Ingresá tu clave de tallerista para quitar la marca de agua y habilitar la impresión:');
-        // CAMBIÁ "4734" POR LA CLAVE QUE VOS QUIERAS
-        if (clave === '4734') {
+        if (!clave) return;
+        if (calcularCodigoSecreto(clave) === 6383371255) {
           document.body.classList.remove('protected-mode');
           btnUnlock.style.display = 'none';
-          alert('✅ Modo Tallerista activado: Marca de agua quitada y botones de descarga/impresión habilitados.');
-        } else if (clave !== null) {
+          alert('✅ Modo Tallerista activado: Marca de agua quitada y descarga habilitada.');
+        } else {
           alert('❌ Clave incorrecta.');
         }
       };
@@ -1380,6 +1387,5 @@
     }
   });
 </script>
-<!-- ============================================================================ -->
 </body>
 </html>
